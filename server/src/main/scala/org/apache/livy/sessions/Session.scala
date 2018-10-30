@@ -68,9 +68,12 @@ object Session {
     val confLists: Map[String, Seq[String]] = livyConf.sparkFileLists
       .map { key => (key -> Nil) }.toMap
 
+    var sparkJarsKey, sparkFilesKey = ""
+    if(conf.get(LivyConf.SPARK_JARS) != None || conf.get(LivyConf.SPARK_YARN_DIST_JARS) == None) sparkJarsKey = LivyConf.SPARK_JARS else sparkJarsKey = LivyConf.SPARK_YARN_DIST_JARS
+    if(conf.get(LivyConf.SPARK_FILES) != None || conf.get(LivyConf.SPARK_YARN_DIST_FILES) == None) sparkFilesKey = LivyConf.SPARK_FILES else sparkFilesKey = LivyConf.SPARK_YARN_DIST_FILES
     val userLists = confLists ++ Map(
-      LivyConf.SPARK_JARS -> jars,
-      LivyConf.SPARK_FILES -> files,
+      sparkJarsKey -> jars,
+      sparkFilesKey -> files,
       LivyConf.SPARK_ARCHIVES -> archives,
       LivyConf.SPARK_PY_FILES -> pyFiles)
 
